@@ -3,6 +3,7 @@
 #include "usart.h"
 #include "f32c_gimbal.h"
 #include "oled_hardware_i2c.h"
+#include "vofa_firewater.h"
 
 #define GIMBAL_PID_SPEED_RPM 70
 #define GIMBAL_PID_X_DIR 1
@@ -158,6 +159,7 @@ static void MiniBalance_Gimbal_PID_Update(void)
 	F32C_Gimbal_Set_Target_Position(target_x, target_y);
 	F32C_Gimbal_Send_Target_Position();
 	F32C_Gimbal_Request_Position();
+	VOFA_FireWater_Send_PID(Vision_Error_X, Vision_Error_Y, target_x, target_y, delta_x, delta_y);
 }
 
 /* 初始化系统资源并运行视觉误差到云台位置的增量式P闭环控制。 */
@@ -174,6 +176,7 @@ int main(void)
 
 	Vision_UART_Init(115200);
 	MiniBalance_Gimbal_Init();
+	VOFA_FireWater_Init(115200);
 
 	while(1)
 	{

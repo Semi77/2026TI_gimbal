@@ -575,6 +575,16 @@
               <FilePath>..\SYSTEM\usart\usart.c</FilePath>
             </File>
             <File>
+              <FileName>vofa_firewater.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTEM\usart\vofa_firewater.c</FilePath>
+            </File>
+            <File>
+              <FileName>vofa_firewater.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SYSTEM\usart\vofa_firewater.h</FilePath>
+            </File>
+            <File>
               <FileName>f32c_motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\motor\f32c_motor.c</FilePath>
