@@ -1,0 +1,33 @@
+# Keil 编译输出目录
+**/OBJ/
+**/Objects/
+**/Listings/
+
+# Keil 编译中间文件与输出文件
+*.o
+*.d
+*.crf
+*.axf
+*.hex
+*.map
+*.lst
+*.lnp
+*.sct
+*.dep
+*.build_log.htm
+*.htm
+*.log
+*.__i
+
+# Keil 用户个人界面配置
+*.uvgui.*
+*.uvguix.*
+
+# 常见编辑器与系统临时文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.user
