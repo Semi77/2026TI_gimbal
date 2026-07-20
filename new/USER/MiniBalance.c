@@ -5,7 +5,9 @@
 #include "oled_hardware_i2c.h"
 #include "bldc_motor.h"
 #include "vision_pid.h"
+#if 0
 #include "vofa_firewater.h"
+#endif
 #include <stdlib.h>
 
 // GIMBAL_SAFE_X_X10和GIMBAL_SAFE_Y_X10这两个参数调整初始旋转的位置
@@ -17,7 +19,7 @@
 #define GIMBAL_TRACK_SPEED_RPM  90
 #define GIMBAL_HOME_DELAY_MS    1800U
 #define GIMBAL_CONTROL_DELAY_MS 10U
-#define GIMBAL_OLED_DIVIDER     10U
+#define GIMBAL_OLED_DIVIDER     50U
 
 int Encoder_cnt, Encoder_pr;
 
@@ -43,7 +45,10 @@ static void MiniBalance_Display_Init(void)
 static void MiniBalance_Comm_Init(void)
 {
 	Vision_UART_Init(115200);
+#if 0
+	/* 功能块：暂时禁用USART2的VOFA调试串口初始化。 */
 	VOFA_FireWater_Init(115200);
+#endif
 	uart3_init(115200);
 	delay_ms(200);
 }
@@ -129,7 +134,9 @@ static void MiniBalance_Display_Vision(void)
 /* 函数功能：运行MaixCAM视觉数据接收、误差计算和OLED显示主程序。 */
 int main(void)
 {
+#if 0
 	u8 vofa_count = 0;
+#endif
 	u8 oled_count = 0;
 
 	MiniBalance_System_Init();
@@ -146,6 +153,8 @@ int main(void)
 	while(1)
 	{
 		VisionPID_Update();
+#if 0
+		/* 功能块：暂时禁用USART2的VOFA调试数据发送。 */
 		vofa_count++;
 		if(vofa_count >= GIMBAL_OLED_DIVIDER)
 		{
@@ -155,6 +164,7 @@ int main(void)
 				VisionPID_Delta_X, VisionPID_Delta_Y,
 				VisionPID_Target_X, VisionPID_Target_Y);
 		}
+#endif
 		oled_count++;
 		if(oled_count >= GIMBAL_OLED_DIVIDER)
 		{

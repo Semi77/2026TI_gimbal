@@ -20,11 +20,15 @@ static u8 vision_receive_buffer[VISION_FRAME_LENGTH];
 static u8 vision_receive_index = 0;
 
 #if 1
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6000000)
+__asm(".global __use_no_semihosting");
+#else
 #pragma import(__use_no_semihosting)
 struct __FILE
 {
 	int handle;
 };
+#endif
 
 FILE __stdout;
 

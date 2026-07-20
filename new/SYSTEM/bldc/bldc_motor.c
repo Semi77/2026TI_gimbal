@@ -38,7 +38,8 @@ void BLDC_SendCmd(u8 addr, u8 cmd, const u8 *data, u8 len)
 		index += len;
 	}
 
-	tx_buf[index++] = BLDC_Calc_BCC(tx_buf, index);
+	tx_buf[index] = BLDC_Calc_BCC(tx_buf, index);
+	index++;
 	tx_buf[index++] = BLDC_FRAME_TAIL;
 	USART3_SEND(tx_buf, index);
 }

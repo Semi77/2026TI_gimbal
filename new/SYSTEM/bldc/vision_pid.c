@@ -12,7 +12,7 @@
 #define VISION_PID_Y_MIN_X10         300
 #define VISION_PID_Y_MAX_X10         1500
 #define VISION_PID_SAFE_X_X10        0
-#define VISION_PID_SAFE_Y_X10        1
+#define VISION_PID_SAFE_Y_X10        0
 #define VISION_PID_FILTER_OLD        7
 #define VISION_PID_FILTER_NEW        3
 
@@ -74,18 +74,19 @@ static s16 VisionPID_Calc(VisionPID_t *pid, s16 raw_error)
 }
 
 /* 函数功能：初始化视觉增量式PID参数和云台目标角度。 */
+/* 程序使用1000倍整数比例，所以350其实是0.35. */
 void VisionPID_Init(void)
 {
-	vision_pid_x.kp = 350;
+	vision_pid_x.kp = 250;
 	vision_pid_x.ki = 0;
 	vision_pid_x.kd = 0;
-	vision_pid_x.dead_zone = 6;
+	vision_pid_x.dead_zone = 4;
 	vision_pid_x.max_delta = 35;
 
-	vision_pid_y.kp = 350;
+	vision_pid_y.kp = 250;
 	vision_pid_y.ki = 0;
 	vision_pid_y.kd = 0;
-	vision_pid_y.dead_zone = 6;
+	vision_pid_y.dead_zone = 4;
 	vision_pid_y.max_delta = 35;
 
 	VisionPID_Reset();
@@ -128,8 +129,15 @@ u8 VisionPID_Update(void)
 
 	VisionPID_Target_X += (s32)VISION_PID_X_DIR * VisionPID_Delta_X;
 	VisionPID_Target_Y += (s32)VISION_PID_Y_DIR * VisionPID_Delta_Y;
-	VisionPID_Target_X = VisionPID_Limit_S32(VisionPID_Target_X, VISION_PID_X_MIN_X10, VISION_PID_X_MAX_X10);
-	VisionPID_Target_Y = VisionPID_Limit_S32(VisionPID_Target_Y, VISION_PID_Y_MIN_X10, VISION_PID_Y_MAX_X10);
+	/* 功能块：暂时取消X轴和Y轴的角度下限，仅保留角度上限用于限位原因测试。 */
+	if(VisionPID_Target_X > VISION_PID_X_MAX_X10)
+	{
+		VisionPID_Target_X = VISION_PID_X_MAX_X10;
+	}
+	if(VisionPID_Target_Y > VISION_PID_Y_MAX_X10)
+	{
+		VisionPID_Target_Y = VISION_PID_Y_MAX_X10;
+	}
 
 	BLDC_SetMultiAngle(BLDC_ADDR_X, VisionPID_Target_X);
 	delay_ms(2);
